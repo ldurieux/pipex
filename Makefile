@@ -1,43 +1,61 @@
-NAME = pipex
+NAME		= pipex
 
-SRCS =  \
-		main.c \
-		srcs/pipex/new.c \
-		srcs/pipex/delete.c \
-		srcs/pipex/execute.c \
+SRCS		= \
+			  main.c \
+			  srcs/pipex/new.c \
+			  srcs/pipex/sanitize_cmds.c \
+			  srcs/pipex/delete.c \
+			  srcs/pipex/run.c \
+			  srcs/pipex/run_parent.c \
+			  srcs/pipex/run_child.c \
 
-LIBS =	\
-		-lft \
+CCDEFS		= \
 
-HEADERS = \
-		includes \
+ASMSRCS		= \
 
-LIB_NAMES	= $(subst -l,lib,$(LIBS))
+LIB_NAMES	= \
+			  libft \
+
+HEADERS		= \
+			  includes \
+
+LIBS		= $(subst lib,-l,$(notdir $(LIB_NAMES)))
 LIB_LD		= $(foreach lib,$(LIB_NAMES),-L$(lib))
-LIB_PATHS	= $(foreach lib,$(LIB_NAMES),$(lib)/$(lib).a)
+LIB_PATHS	= $(foreach lib,$(LIB_NAMES),$(lib)/$(notdir $(lib)).a)
 LIB_HEADERS	= $(foreach lib,$(LIB_NAMES),-I$(lib)/)
 
-OBJS		= ${SRCS:.c=.o}
-DEPS		= ${SRCS:.c=.d}
-CC			= gcc
+CCDEFSFLGS	= $(foreach def,$(CCDEFS),-D $(def))
+
+BUILDDIR	= build
+OBJS		= $(SRCS:%.c=$(BUILDDIR)/%.o) $(ASMSRCS:%.s=$(BUILDDIR)/%.o)
+DEPS		= $(SRCS:%.c=$(BUILDDIR)/%.d)
+CC			= cc
+CCWFLGS		= -Wall -Wextra
 CCDBGFLGS	= -g3
-CCFLAGS		= -Wall -Wextra
+CCO1FLGS	= -O1 -march=native
+CCO2FLGS	= -O2 -march=native
+CCO3FLGS	= -O3 -march=native
 DEPSFLAGS	= -MMD -MP
-RM			= rm -f
+RM			= rm -Rf
 MAKE		= make -C
+MKDIR		= mkdir
 AR			= ar
-AR_FLAGS	= rc
-
-$(NAME) : $(LIB_PATHS) $(OBJS)
-		$(CC) $(CCFLAGS) $(CCDBGFLGS) $(LIB_LD) $(LIBS) -o $@ $(OBJS)
-
-$(LIB_PATHS) :
-		$(MAKE) $(notdir $(basename $@))
+ARFLAGS		= rcs
+NASM		= nasm
+NASMFLAGS	= -felf64
 
 all : $(NAME)
 
+$(NAME) : $(LIB_PATHS) $(OBJS)
+		$(CC) $(CCWFLGS) -o $(NAME) $(OBJS) $(LIB_LD) $(LIBS)
+
+bonus : $(NAME)
+
+$(LIB_PATHS) :
+		$(MAKE) $(dir $@)
+
 clean :
-		-$(RM) $(OBJS) $(DEPS)
+		-$(RM) $(BUILDDIR)
 
 fclean : clean
 		$(foreach lib, $(LIB_NAMES), \
@@ -47,9 +65,15 @@ fclean : clean
 
 re : fclean all
 
+$(BUILDDIR)/%.o : %.s Makefile
+		mkdir -p $(@D)
+		$(NASM) $(NASMFLAGS) -o $(BUILDDIR)/$@ $<
+
 -include $(DEPS)
 
-%.o : %.c Makefile
-		$(CC) $(CCFLAGS) $(DEPSFLAGS) $(CCDBGFLGS) -I$(HEADERS) $(LIB_HEADERS) -c $< -o $@
+$(BUILDDIR)/%.o : %.c Makefile
+		mkdir -p $(@D)
+		$(CC) $(CCWFLGS) $(DEPSFLAGS) $(CCDBGFLGS) $(CCDEFSFLGS) -I$(HEADERS) $(LIB_HEADERS) -c $< -o $@
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus
+

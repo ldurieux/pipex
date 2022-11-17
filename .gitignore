@@ -1,6 +1,4 @@
-libft
-libft.a
-main.c
+pipex
 
 *.o
 *.d
