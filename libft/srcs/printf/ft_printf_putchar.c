@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_printf_putchar.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldurieux <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/18 11:55:16 by ldurieux          #+#    #+#             */
-/*   Updated: 2022/11/18 11:55:18 by ldurieux         ###   ########lyon.fr   */
+/*   Created: 2022/11/10 17:01:26 by ldurieux          #+#    #+#             */
+/*   Updated: 2022/11/10 17:01:29 by ldurieux         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "ft_printf_internal.h"
 
-#define MIN_ARGS 5
-
-int	main(int argc, char **argv, char **envp)
+int	ft_printf_putchar(int fd, t_printf_conversion conv, char val)
 {
-	t_pipex	*pipex;
+	int	size;
+	int	i;
 
-	if (argc < MIN_ARGS)
-	{
-		ft_putendl_fd("Usage: {file_in} [commands](2...n) {file_out}.",
-			STDERR_FILENO);
-		return (1);
-	}
-	pipex = pipex_new(envp, argc - 1, argv + 1);
-	if (!pipex)
-		return (1);
-	pipex_run(pipex);
-	pipex_delete(pipex);
-	return (0);
+	size = 1;
+	if (conv.width > 0)
+		size = conv.width;
+	i = 0;
+	while (++i < size && !(conv.flags & F_Left_Adjusted))
+		write(fd, " ", 1);
+	write(fd, &val, 1);
+	while (++i - 1 < size && conv.flags & F_Left_Adjusted)
+		write(fd, " ", 1);
+	return (size);
 }

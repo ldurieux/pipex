@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   run_parent.c                                       :+:      :+:    :+:   */
+/*   ft_frwlist_iter.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldurieux <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ldurieux <ldurieux@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/18 11:54:42 by ldurieux          #+#    #+#             */
-/*   Updated: 2022/11/18 11:54:44 by ldurieux         ###   ########lyon.fr   */
+/*   Created: 2022/09/07 20:29:11 by ldurieux          #+#    #+#             */
+/*   Updated: 2022/09/07 20:29:12 by ldurieux         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_internal.h"
-#include "pipex.h"
+#include "ft_frwlist.h"
 
-int	pipex_run_parent(pid_t child_pid, int fd_pipe_write)
+void	ft_frwlist_iter(t_ftfrwlist *this, void (*f)(void *))
 {
-	int	status;
+	t_ftfrwlist_node	*node;
 
-	close(fd_pipe_write);
-	waitpid(child_pid, &status, 0);
-	return (status);
+	if (!this)
+		return ;
+	node = this->first;
+	while (node)
+	{
+		f(node->value);
+		node = node->next;
+	}
 }

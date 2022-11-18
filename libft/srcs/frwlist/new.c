@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   run_parent.c                                       :+:      :+:    :+:   */
+/*   ft_frwlist_new.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldurieux <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ldurieux <ldurieux@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/18 11:54:42 by ldurieux          #+#    #+#             */
-/*   Updated: 2022/11/18 11:54:44 by ldurieux         ###   ########lyon.fr   */
+/*   Created: 2022/09/07 14:56:38 by ldurieux          #+#    #+#             */
+/*   Updated: 2022/09/07 14:56:39 by ldurieux         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_internal.h"
-#include "pipex.h"
+#include "ft_frwlist.h"
 
-int	pipex_run_parent(pid_t child_pid, int fd_pipe_write)
+t_ftfrwlist	*ft_frwlist_new(void)
 {
-	int	status;
+	t_ftfrwlist	*res;
 
-	close(fd_pipe_write);
-	waitpid(child_pid, &status, 0);
-	return (status);
+	res = malloc(sizeof(t_ftfrwlist));
+	if (!res)
+		return (NULL);
+	res->size = 0;
+	res->first = NULL;
+	res->last = NULL;
+	return (res);
 }

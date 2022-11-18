@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   run_parent.c                                       :+:      :+:    :+:   */
+/*   ft_stack_new.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldurieux <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ldurieux <ldurieux@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/18 11:54:42 by ldurieux          #+#    #+#             */
-/*   Updated: 2022/11/18 11:54:44 by ldurieux         ###   ########lyon.fr   */
+/*   Created: 2022/09/07 00:21:12 by ldurieux          #+#    #+#             */
+/*   Updated: 2022/09/07 00:21:12 by ldurieux         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_internal.h"
-#include "pipex.h"
+#include "ft_stack.h"
 
-int	pipex_run_parent(pid_t child_pid, int fd_pipe_write)
+t_ftstack	*ft_stack_new(void)
 {
-	int	status;
+	t_ftstack	*res;
 
-	close(fd_pipe_write);
-	waitpid(child_pid, &status, 0);
-	return (status);
+	res = malloc(sizeof(t_ftstack));
+	if (!res)
+		return (NULL);
+	res->size = 0;
+	res->top = NULL;
+	return (res);
 }

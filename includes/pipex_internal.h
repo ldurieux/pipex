@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex_internal.h                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ldurieux <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/18 11:55:05 by ldurieux          #+#    #+#             */
+/*   Updated: 2022/11/18 11:55:06 by ldurieux         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PIPEX_INTERNAL_H
 # define PIPEX_INTERNAL_H
 
@@ -7,7 +19,7 @@
 # include <errno.h>
 # include <string.h>
 
-typedef struct s_pipex t_pipex;
+typedef struct s_pipex	t_pipex;
 
 /* replace all cmds in pipex by their path
  * return 0 if a cmd was not found or

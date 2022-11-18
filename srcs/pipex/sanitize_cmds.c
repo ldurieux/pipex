@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sanitize_cmds.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ldurieux <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/18 11:54:45 by ldurieux          #+#    #+#             */
+/*   Updated: 2022/11/18 11:54:53 by ldurieux         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex_internal.h"
 #include "pipex.h"
 
@@ -25,7 +37,8 @@ static char	*find_cmd_on_found(char *to_check)
 		return (to_check);
 	ft_putstr_fd("pipex: permission denied: ", STDERR_FILENO);
 	ft_putendl_fd(to_check, STDERR_FILENO);
-	return (free(to_check), NULL);
+	free(to_check);
+	return (NULL);
 }
 
 static char	*find_cmd(char **paths, char *cmd, char **args)
@@ -51,7 +64,8 @@ static char	*find_cmd(char **paths, char *cmd, char **args)
 	}
 	ft_putstr_fd("pipex: command not found: ", STDERR_FILENO);
 	ft_putendl_fd(tmp[1], STDERR_FILENO);
-	return (free(tmp[1]), NULL);
+	free(tmp[1]);
+	return (NULL);
 }
 
 static int	free_strarr(char **arr)

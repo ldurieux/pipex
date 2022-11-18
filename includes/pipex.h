@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ldurieux <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/18 11:55:03 by ldurieux          #+#    #+#             */
+/*   Updated: 2022/11/18 11:55:04 by ldurieux         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PIPEX_H
 # define PIPEX_H
 
@@ -6,6 +18,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include "libft.h"
+# include "ft_printf.h"
 
 typedef struct s_pipex
 {

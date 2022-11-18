@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ldurieux <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/18 11:54:38 by ldurieux          #+#    #+#             */
+/*   Updated: 2022/11/18 11:54:40 by ldurieux         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 #include "pipex_internal.h"
 
 #define IN 0
 #define OUT 1
 
-static int	run(char **envp, char *cmd, char *args, int fds[2])
+static int	cmd_fork(char **envp, char *cmd, char *args, int fds[2])
 {
 	pid_t	pid;
 
@@ -25,25 +37,27 @@ static int	run_first(t_pipex *pipex, int fd_in, int fd_out)
 
 	fds[IN] = fd_in;
 	fds[OUT] = fd_out;
-	res = run(pipex->envp, pipex->cmds[0], pipex->args[0], fds);
+	res = cmd_fork(pipex->envp, pipex->cmds[0], pipex->args[0], fds);
 	close(fd_in);
 	return (res);
 }
 
-static int run_last(t_pipex *pipex, int fd_in, int fd_out, size_t cmd_idx)
+static int	run_last(t_pipex *pipex, int fd_in, int fd_out, size_t cmd_idx)
 {
 	int	fds[2];
 	int	res;
 
 	fds[IN] = fd_in;
 	fds[OUT] = fd_out;
-	res = run(pipex->envp, pipex->cmds[cmd_idx], pipex->args[cmd_idx], fds);
+	res = cmd_fork(pipex->envp, pipex->cmds[cmd_idx], pipex->args[cmd_idx],
+			fds);
 	close(fd_in);
 	close(fd_out);
 	return (res);
 }
 
-static int	run_cmds(t_pipex *pipex, int fd_file_in, int fd_file_out, size_t cmd_count)
+static int	run_cmds(t_pipex *pipex, int fd_file_in, int fd_file_out,
+				size_t cmd_count)
 {
 	int		pipe_fds[2];
 	int		fds[2];
@@ -60,7 +74,7 @@ static int	run_cmds(t_pipex *pipex, int fd_file_in, int fd_file_out, size_t cmd_
 		if (pipe(pipe_fds))
 			return (0);
 		fds[OUT] = pipe_fds[OUT];
-		if (!run(pipex->envp, pipex->cmds[idx], pipex->args[idx], fds))
+		if (!cmd_fork(pipex->envp, pipex->cmds[idx], pipex->args[idx], fds))
 			return (0);
 		close(fds[IN]);
 	}
@@ -77,8 +91,18 @@ int	pipex_run(t_pipex *pipex)
 	while (pipex->cmds[cmd_count])
 		cmd_count++;
 	fd_in = open(pipex->filein, O_RDONLY);
-	fd_out = open(pipex->fileout, O_WRONLY | O_CREAT | O_TRUNC);
-	if (fd_in == -1 || fd_out == -1)
+	if (fd_in == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "pipex: %s: %s\n", strerror(errno),
+			pipex->filein);
 		return (0);
+	}
+	fd_out = open(pipex->fileout, O_WRONLY | O_CREAT | O_TRUNC);
+	if (fd_out == -1)
+	{
+		ft_dprintf(STDERR_FILENO, "pipex: %s: %s\n", strerror(errno),
+			pipex->fileout);
+		return (0);
+	}
 	return (run_cmds(pipex, fd_in, fd_out, cmd_count));
 }

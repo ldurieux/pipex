@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_child.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ldurieux <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/18 11:54:40 by ldurieux          #+#    #+#             */
+/*   Updated: 2022/11/18 11:54:42 by ldurieux         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex_internal.h"
 
 #define ERROR	127
@@ -35,13 +47,9 @@ void	pipex_run_child(char **envp, char *cmd, char *args, int fds[2])
 		run_child_exit(cmd_args, ERROR);
 	res_args[0] = cmd;
 	ft_memcpy((void *)(res_args + 1), (void *)cmd_args,
-				sizeof(char *) * (size + 1));
+		sizeof(char *) * (size + 1));
 	free(cmd_args);
 	if (execve(cmd, res_args, envp) != -1)
 		run_child_exit(res_args, SUCCESS);
-	/* DEBUG */
-	ft_putendl_fd(cmd, STDOUT_FILENO);
-	ft_putendl_fd(res_args[1], STDOUT_FILENO);
-	/*  END  */
 	run_child_exit(res_args, ERROR);
 }

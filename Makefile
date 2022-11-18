@@ -22,7 +22,7 @@ HEADERS		= \
 LIBS		= $(subst lib,-l,$(notdir $(LIB_NAMES)))
 LIB_LD		= $(foreach lib,$(LIB_NAMES),-L$(lib))
 LIB_PATHS	= $(foreach lib,$(LIB_NAMES),$(lib)/$(notdir $(lib)).a)
-LIB_HEADERS	= $(foreach lib,$(LIB_NAMES),-I$(lib)/)
+LIB_HEADERS	= $(foreach lib,$(LIB_NAMES),-I$(lib)/includes/)
 
 CCDEFSFLGS	= $(foreach def,$(CCDEFS),-D $(def))
 
@@ -30,7 +30,7 @@ BUILDDIR	= build
 OBJS		= $(SRCS:%.c=$(BUILDDIR)/%.o) $(ASMSRCS:%.s=$(BUILDDIR)/%.o)
 DEPS		= $(SRCS:%.c=$(BUILDDIR)/%.d)
 CC			= cc
-CCWFLGS		= -Wall -Wextra
+CCWFLGS		= -Wall -Wextra -Werror
 CCDBGFLGS	= -g3
 CCO1FLGS	= -O1 -march=native
 CCO2FLGS	= -O2 -march=native

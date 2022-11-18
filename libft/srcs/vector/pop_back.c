@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   run_parent.c                                       :+:      :+:    :+:   */
+/*   ft_vector_pop_back.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldurieux <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ldurieux <ldurieux@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/18 11:54:42 by ldurieux          #+#    #+#             */
-/*   Updated: 2022/11/18 11:54:44 by ldurieux         ###   ########lyon.fr   */
+/*   Created: 2022/09/06 19:10:35 by ldurieux          #+#    #+#             */
+/*   Updated: 2022/09/06 19:10:36 by ldurieux         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_internal.h"
-#include "pipex.h"
+#include "ft_vector.h"
 
-int	pipex_run_parent(pid_t child_pid, int fd_pipe_write)
+void	*ft_vector_pop_back(t_ftvector *this)
 {
-	int	status;
-
-	close(fd_pipe_write);
-	waitpid(child_pid, &status, 0);
-	return (status);
+	if (!this || this->size == 0)
+		return (NULL);
+	return (((char *)this->data) + this->_data_size * this->size);
 }
