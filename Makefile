@@ -44,15 +44,17 @@ ARFLAGS		= rcs
 NASM		= nasm
 NASMFLAGS	= -felf64
 
-all : $(NAME)
+all : libs $(NAME)
 
-$(NAME) : $(LIB_PATHS) $(OBJS)
+$(NAME) : $(OBJS)
 		$(CC) $(CCWFLGS) -o $(NAME) $(OBJS) $(LIB_LD) $(LIBS)
 
 bonus : $(NAME)
 
-$(LIB_PATHS) :
-		$(MAKE) $(dir $@)
+libs :
+		$(foreach lib, $(LIB_NAMES), \
+			$(MAKE) $(lib); \
+		)
 
 clean :
 		-$(RM) $(BUILDDIR)
@@ -66,14 +68,13 @@ fclean : clean
 re : fclean all
 
 $(BUILDDIR)/%.o : %.s Makefile
-		mkdir -p $(@D)
+		@mkdir -p $(@D)
 		$(NASM) $(NASMFLAGS) -o $(BUILDDIR)/$@ $<
 
 -include $(DEPS)
 
-$(BUILDDIR)/%.o : %.c Makefile
-		mkdir -p $(@D)
+$(BUILDDIR)/%.o : %.c Makefile $(LIB_PATHS)
+		@mkdir -p $(@D)
 		$(CC) $(CCWFLGS) $(DEPSFLAGS) $(CCDBGFLGS) $(CCDEFSFLGS) -I$(HEADERS) $(LIB_HEADERS) -c $< -o $@
 
-.PHONY: all clean fclean re bonus
-
+.PHONY: all clean fclean re bonus libs
