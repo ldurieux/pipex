@@ -18,6 +18,7 @@
 static char	**get_paths(char **envp)
 {
 	char	*all_paths;
+	char	**res_not_found;
 
 	all_paths = *envp++;
 	while (all_paths)
@@ -27,7 +28,16 @@ static char	**get_paths(char **envp)
 		all_paths = *envp++;
 	}
 	if (!all_paths)
-		return (NULL);
+	{
+		res_not_found = malloc(sizeof(char *) * 2);
+		if (!res_not_found)
+			return (NULL);
+		res_not_found[0] = ft_strdup("");
+		if (!res_not_found[0])
+			return (free(res_not_found), NULL);
+		res_not_found[1] = NULL;
+		return (res_not_found);
+	}
 	return (ft_split(all_paths + STRLEN_PATH, ':'));
 }
 
@@ -52,7 +62,7 @@ static char	*find_cmd(char **paths, char *cmd, char **args)
 		return (NULL);
 	tmp[2] = NULL;
 	i = (size_t)-1;
-	while (paths[++i])
+	while (paths[++i] && paths[i][0])
 	{
 		tmp[0] = paths[i];
 		to_check = ft_strjoin_r(tmp, "/");
