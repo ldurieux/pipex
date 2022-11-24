@@ -97,7 +97,8 @@ int	pipex_run(t_pipex *pipex)
 			pipex->filein);
 		return (0);
 	}
-	fd_out = open(pipex->fileout, O_WRONLY | O_CREAT | O_TRUNC);
+	fd_out = open(pipex->fileout, O_WRONLY | O_CREAT | O_TRUNC,
+			S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
 	if (fd_out == -1)
 	{
 		ft_dprintf(STDERR_FILENO, "pipex: %s: %s\n", strerror(errno),
