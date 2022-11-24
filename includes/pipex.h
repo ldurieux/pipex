@@ -27,6 +27,7 @@ typedef struct s_pipex
 	char	*fileout;
 	char	**cmds;
 	char	**args;
+	char	*here_doc;
 }	t_pipex;
 
 t_pipex	*pipex_new(char **envp, int argc, char **args);

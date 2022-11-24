@@ -30,4 +30,9 @@ int		pipex_sanitize_cmds(t_pipex *pipex, size_t cmd_count);
 void	pipex_run_child(char **envp, char *cmd, char *args, int fds[2]);
 int		pipex_run_parent(pid_t child_pid, int fd_pipe_write);
 
+int		run_cmds(t_pipex *pipex, int fd_file_in, int fd_file_out,
+			size_t cmd_count);
+
+void	*ft_realloc(void **ptr, size_t *size, size_t new_size);
+
 #endif // PIPEX_INTERNAL_H

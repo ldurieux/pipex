@@ -6,8 +6,10 @@ SRCS		= \
 			  srcs/pipex/sanitize_cmds.c \
 			  srcs/pipex/delete.c \
 			  srcs/pipex/run.c \
+			  srcs/pipex/run_cmds.c \
 			  srcs/pipex/run_parent.c \
 			  srcs/pipex/run_child.c \
+			  srcs/pipex/ft_realloc.c \
 
 CCDEFS		= \
 

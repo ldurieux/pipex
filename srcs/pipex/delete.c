@@ -26,5 +26,6 @@ void	pipex_delete(t_pipex *pipex)
 		free(pipex->cmds);
 	}
 	free(pipex->args);
+	free(pipex->here_doc);
 	free(pipex);
 }

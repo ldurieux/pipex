@@ -13,12 +13,19 @@
 #include "pipex.h"
 
 #define MIN_ARGS 5
+#define LEN_HERE_DOC 8
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_pipex	*pipex;
 
 	if (argc < MIN_ARGS)
+	{
+		ft_putendl_fd("Usage: {file_in} [commands](2...n) {file_out}.",
+			STDERR_FILENO);
+		return (1);
+	}
+	if (argc < (MIN_ARGS + !ft_strncmp(argv[1], "here_doc", LEN_HERE_DOC)))
 	{
 		ft_putendl_fd("Usage: {file_in} [commands](2...n) {file_out}.",
 			STDERR_FILENO);
